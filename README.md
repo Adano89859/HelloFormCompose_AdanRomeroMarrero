@@ -83,25 +83,6 @@ Si el campo está vacío, muestra "Introduce tu nombre"
 
 Al rotar el dispositivo: El estado se mantiene gracias a rememberSaveable
 
-##🏗️ Estructura del Código
-El proyecto sigue una estructura simple:
-
-text
-app/
-├── src/main/java/com/example/helloformcompose/
-│   └── MainActivity.kt    # Actividad principal y composables
-├── build.gradle.kts       # Configuración de dependencias
-└── res/                   # Recursos (temas, colores, etc.)
-Composable Principal: HelloForm()
-kotlin
-@Composable
-fun HelloForm() {
-    var nombre by rememberSaveable { mutableStateOf("") }
-    var saludo by rememberSaveable { mutableStateOf("") }
-    val teclado = LocalSoftwareKeyboardController.current
-    
-    // UI con Column, TextField, Button y Text
-}
 ##📋 Requisitos del Sistema
 Android API: Nivel 21 (Android 5.0) o superior
 
@@ -110,4 +91,4 @@ Kotlin: Versión 1.9.0 o superior
 Gradle: Versión 8.0 o superior
 
 ##👨‍💻 Autor
-Adán Romero Marrer
+Adán Romero Marrero
