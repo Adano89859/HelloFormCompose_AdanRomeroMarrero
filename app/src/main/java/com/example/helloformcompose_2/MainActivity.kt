@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helloformcompose_2.ui.theme.HelloFormCompose_2Theme
@@ -33,12 +34,6 @@ class MainActivity : ComponentActivity() {
         //Aquí tengo el setContent
         setContent {
             HelloFormCompose_2Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
 
                 //Lamo al HelloForm
                 HelloForm()
@@ -48,29 +43,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HelloFormCompose_2Theme {
-        Greeting("Android")
-    }
-}
-
-
 //Creo el HelloForm
 @Composable
 fun HelloForm(){
     //Creo una variable que contendrá la el nombre, y otra el saludo y que no perderá dicha información
     var nombre by rememberSaveable() { mutableStateOf("") }
     var saludo by rememberSaveable() { mutableStateOf("") }
+
+    //Creo la variable de teclado
+    val teclado = LocalSoftwareKeyboardController.current
 
     //Creo la división en Columna para distribuir los contenidos
     Column(
@@ -85,13 +66,20 @@ fun HelloForm(){
             label = { Text("Introduce tu nombre") },
             modifier = Modifier.fillMaxWidth(),
             onValueChange = {
-                //Aquí, "it" es el texto que el usuario está escribiendo, y por lo tanto se la asigno a la variable nombre
-                nombre = it
+
+                //Pongo un condicional para que máximo se puedan escribir 20 caracteres
+                if(it.length <= 20){
+                    //Aquí, "it" es el texto que el usuario está escribiendo, y por lo tanto se la asigno a la variable nombre
+                    nombre = it
+                }
 
             },
             //Solo se puede escribir en una línea, no en varias
-            singleLine = true
-
+            singleLine = true,
+            //Añado este apartado para que se muestren la cantidad de caracteres que están escritos
+            supportingText={
+                Text("Caracteres actuales: ${nombre.length}")
+            }
         )
 
         //Añado un espacio hasta el siguiente elemento
@@ -110,6 +98,9 @@ fun HelloForm(){
                 }else{
                     saludo = "Hola, $nombre"
                 }
+
+                //Hago que se oculte el teclado
+                teclado?.hide()
 
         }){
             Text("Saludar")
